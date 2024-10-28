@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机点名系统</title>
+    <style>
+        body {
+            background-color: #e3f2fd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            color: #333;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #1976d2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        #static-result {
+            font-size: 36px;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        #dynamic-result {
+            font-size: 48px;
+            padding: 20px;
+            display: none; /* 默认隐藏 */
+            position: relative;
+            animation: fadeIn 1s; /* 动画效果 */
+            border-radius: 30px; /* 不规则形状 */
+            background: radial-gradient(circle, #ffeb3b, #ffc107);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            margin-top: 20px; /* 调整位置以避免重叠 */
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 20px;
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #f50057;
+        }
+        /* 云朵样式 */
+        .cloud {
+            position: absolute;
+            width: 100px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: floatCloud 10s linear infinite;
+        }
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+        }
+        .cloud::before {
+            width: 80px;
+            height: 50px;
+            left: -40px;
+            top: 10px;
+        }
+        .cloud::after {
+            width: 80px;
+            height: 50px;
+            right: -40px;
+            top: 10px;
+        }
+        @keyframes floatCloud {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(100vw); }
+        }
+        /* 星星样式 */
+        .star {
+            position: absolute;
+            width: 15px; /* 增大星星的大小 */
+            height: 15px; /* 增大星星的大小 */
+            background: yellow;
+            border-radius: 50%;
+            box-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
+            animation: twinkle 1.5s infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        /* 星星位置 */
+        .star:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .star:nth-child(2) { top: 30%; left: 20%; animation-delay: 0.5s; }
+        .star:nth-child(3) { top: 50%; left: 30%; animation-delay: 1s; }
+        .star:nth-child(4) { top: 70%; left: 40%; animation-delay: 1.5s; }
+        .star:nth-child(5) { top: 20%; left: 50%; animation-delay: 2s; }
+        .star:nth-child(6) { top: 40%; left: 60%; animation-delay: 2.5s; }
+        .star:nth-child(7) { top: 60%; left: 70%; animation-delay: 3s; }
+        .star:nth-child(8) { top: 80%; left: 80%; animation-delay: 3.5s; }
+        .star:nth-child(9) { top: 30%; left: 90%; animation-delay: 4s; }
+        .star:nth-child(10) { top: 50%; left: 5%; animation-delay: 4.5s; }
+
+        /* 名字显示动画 */
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(-50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes floatName {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50px); }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 28px;
+            }
+            #static-result {
+                font-size: 24px;
+            }
+            #dynamic-result {
+                font-size: 36px;
+            }
+            button {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>随机点名系统</h1>
+    <div id="static-result">被点名的同学是：</div>
+    <div id="dynamic-result"></div>
+    <button id="start-button" onclick="startRandomCall()">开始点名</button>
+    <button id="stop-button" onclick="stopRandomCall()" disabled>停止点名</button>
+
+    <!-- 云朵装饰 -->
+    <div class="cloud" style="top: 5%;"></div>
+    <div class="cloud" style="top: 10%; animation-delay: 2s;"></div>
+    <div class="cloud" style="bottom: 5%;"></div>
+    <div class="cloud" style="bottom: 10%; animation-delay: 2s;"></div>
+
+    <!-- 星星装饰 -->
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+
+    <script>
+        const students = [
+            "陈双文", "陈科廷", "陈彦哲", "冯奕茗", "方子宇", "郭其运", "谷雨哲", "高与呈",
+            "葛天琪", "贺静雯", "贺时瑞", "胡涵月", "郝运", "李兆原", "刘羽涵", "李傲晴",
+            "刘书豪", "李天宇", "卢诗涵", "马佳慧", "马洛桐", "马晨曦", "马诗媛", "宁博远",
+            "潘奕衡", "任嘉昊", "宋紫怡", "宋思学", "沈博文", "孙浩元", "绳家晔", "王俊哲",
+            "王韵涵", "徐博", "许子轩", "姚霁育", "杨承翰", "余心然", "曾若晨", "张骞",
+            "张博文", "赵千羽", "张锦亮", "张雅茹", "张宸嘉", "张汐源", "赵雅璋", "李天尊"
+        ];
+
+        let intervalId;
+
+        function startRandomCall() {
+            document.getElementById('dynamic-result').style.display = 'block'; // 显示动态结果框
+            const dynamicResultDiv = document.getElementById('dynamic-result');
+
+            // 开始循环显示名字
+            intervalId = setInterval(() => {
+                const randomIndex = Math.floor(Math.random() * students.length);
+                dynamicResultDiv.innerText = students[randomIndex];
+            }, 100); // 每100毫秒更新一次
+
+            // 启用停止按钮，禁用开始按钮
+            document.getElementById('start-button').disabled = true;
+            document.getElementById('stop-button').disabled = false;
+        }
+
+        function stopRandomCall() {
+            clearInterval(intervalId); // 停止循环
+            const randomIndex = Math.floor(Math.random() * students.length);
+            const chosenStudent = students[randomIndex];
+            const dynamicResultDiv = document.getElementById('dynamic-result');
+            dynamicResultDiv.innerText = chosenStudent; // 显示最终结果
+            dynamicResultDiv.style.animation = 'fadeIn 1s'; // 显示动画
+
+            // 启用开始按钮，禁用停止按钮
+            document.getElementById('start-button').disabled = false;
+            document.getElementById('stop-button').disabled = true;
+        }
+    </script>
+
+</body>
+</html>
