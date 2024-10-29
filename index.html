@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>随机点名系统</title>
+    <title>八年级二班点名系统</title>
     <style>
         body {
             background-color: #e3f2fd;
@@ -35,13 +35,13 @@
         #dynamic-result {
             font-size: 48px;
             padding: 20px;
-            display: none; /* 默认隐藏 */
+            display: none;
             position: relative;
-            animation: fadeIn 1s; /* 动画效果 */
-            border-radius: 30px; /* 不规则形状 */
+            animation: fadeIn 1s;
+            border-radius: 30px;
             background: radial-gradient(circle, #ffeb3b, #ffc107);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-            margin-top: 20px; /* 调整位置以避免重叠 */
+            margin-top: 20px;
         }
         button {
             padding: 12px 25px;
@@ -56,6 +56,18 @@
         }
         button:hover {
             background-color: #f50057;
+        }
+        /* Logo样式 */
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7); /* 深色半透明背景 */
+            padding: 15px 25px; /* 加大背景框大小 */
+            border-radius: 10px;
+        }
+        .logo-container img {
+            height: 60px; /* 调整Logo的大小 */
         }
         /* 云朵样式 */
         .cloud {
@@ -93,8 +105,8 @@
         /* 星星样式 */
         .star {
             position: absolute;
-            width: 15px; /* 增大星星的大小 */
-            height: 15px; /* 增大星星的大小 */
+            width: 15px;
+            height: 15px;
             background: yellow;
             border-radius: 50%;
             box-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
@@ -116,35 +128,26 @@
         .star:nth-child(9) { top: 30%; left: 90%; animation-delay: 4s; }
         .star:nth-child(10) { top: 50%; left: 5%; animation-delay: 4.5s; }
 
-        /* 名字显示动画 */
         @keyframes fadeIn {
             0% { opacity: 0; transform: translateY(-50px); }
             100% { opacity: 1; transform: translateY(0); }
         }
-        @keyframes floatName {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-50px); }
-        }
-
         @media (max-width: 600px) {
-            h1 {
-                font-size: 28px;
-            }
-            #static-result {
-                font-size: 24px;
-            }
-            #dynamic-result {
-                font-size: 36px;
-            }
-            button {
-                font-size: 18px;
-            }
+            h1 { font-size: 28px; }
+            #static-result { font-size: 24px; }
+            #dynamic-result { font-size: 36px; }
+            button { font-size: 18px; }
         }
     </style>
 </head>
 <body>
 
-    <h1>随机点名系统</h1>
+    <!-- Logo容器 -->
+    <div class="logo-container">
+        <img src="logo3.png" alt="Logo">
+    </div>
+
+    <h1>八年级二班点名系统</h1>
     <div id="static-result">被点名的同学是：</div>
     <div id="dynamic-result"></div>
     <button id="start-button" onclick="startRandomCall()">开始点名</button>
@@ -181,33 +184,21 @@
         let intervalId;
 
         function startRandomCall() {
-            document.getElementById('dynamic-result').style.display = 'block'; // 显示动态结果框
+            document.getElementById('dynamic-result').style.display = 'block';
             const dynamicResultDiv = document.getElementById('dynamic-result');
-
-            // 开始循环显示名字
             intervalId = setInterval(() => {
                 const randomIndex = Math.floor(Math.random() * students.length);
                 dynamicResultDiv.innerText = students[randomIndex];
-            }, 100); // 每100毫秒更新一次
-
-            // 启用停止按钮，禁用开始按钮
+            }, 100);
             document.getElementById('start-button').disabled = true;
             document.getElementById('stop-button').disabled = false;
         }
 
         function stopRandomCall() {
-            clearInterval(intervalId); // 停止循环
-            const randomIndex = Math.floor(Math.random() * students.length);
-            const chosenStudent = students[randomIndex];
-            const dynamicResultDiv = document.getElementById('dynamic-result');
-            dynamicResultDiv.innerText = chosenStudent; // 显示最终结果
-            dynamicResultDiv.style.animation = 'fadeIn 1s'; // 显示动画
-
-            // 启用开始按钮，禁用停止按钮
+            clearInterval(intervalId);
             document.getElementById('start-button').disabled = false;
             document.getElementById('stop-button').disabled = true;
         }
     </script>
-
 </body>
 </html>
